@@ -1,5 +1,4 @@
-const Nightmare = require('nightmare');		
-const nightmare = Nightmare({
+const nightmare = require('nightmare')({
   show: true,
   typeInterval: 20,
 });

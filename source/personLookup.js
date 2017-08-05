@@ -7,15 +7,11 @@ const searchResi = ({ name }) => http({
   params: {
     country_id: 1,
     q: name,
-    utf8:'✓'
+    utf8: '✓'
   }
 }).then((response) => {
   const $ = cheerio.load(response.data)
-  const data = []
-  $('tr').each((i, el) => {
-    data.push($(el).text())
-  })
-  
+  const data = $('tr').map((i, el) => $(el).text())
   console.log(data)
 })
 
