@@ -25,8 +25,16 @@ const search = ({ address }) => nightmare
     .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
     .click('#addressLink')
     .wait(5000)
-    // .evaluate(() => document.querySelector('#propertySummaryList > div:nth-child(4) > div > div.floatLeft.contentContainer > div.heading > h2 > a').innerHTML)
-    // .then((name) => [name])
+    .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
+        const address = el.querySelector('h2 a').innerHTML
+        const fields = [ ...el.querySelectorAll('.summaryListItemContent li') ].map(liEl => ({
+          key: liEl.querySelector('label').innerHtml,
+          val: liEl.querySelector('span').innerHtml,
+        }))
+        return { address, fields }
+      })
+    )
+     .then(data => console.log(data))
     // .catch(console.error);
     // .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
     // .click('#searchAddressSimple>a')
