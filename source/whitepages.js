@@ -8,7 +8,7 @@ const searchResi = (options) => http({
     givenName: options.givenName,
     name: options.name,
   }
-})
+}).then(response => response.data.results)
 
 const searchBusiness = ({ location, name, }) => http({
   method: 'GET',
@@ -18,7 +18,7 @@ const searchBusiness = ({ location, name, }) => http({
     expand: true,
     name: name,
   }
-})
+}).then(response => response.data.results)
 
 module.exports = {
   searchBusiness,
