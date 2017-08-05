@@ -25,10 +25,10 @@ app.get('/api/v1/search', (req, res) => {
 
     const { address } = req.query;
 
-    rpData.search({ address }).then((names) => {
-
-        return Promise.map(names, (name) => {
-            return whitePages.search({ type: 'residential', name });
+    rpData.search({ address }).then((properties) => {
+        console.log(properties)
+        return Promise.map(properties, (property) => {
+            return whitePages.search({ type: 'residential', name: property['Owner Name'] });
         });
     })
     .then((results) => res.json(results));

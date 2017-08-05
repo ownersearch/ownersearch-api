@@ -27,14 +27,16 @@ const search = ({ address }) => nightmare
     .wait(5000)
     .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
         const address = el.querySelector('h2 a').innerHTML
-        const fields = [ ...el.querySelectorAll('.summaryListItemContent li') ].map(liEl => ({
-          key: liEl.querySelector('label').innerHTML,
-          val: liEl.querySelector('span').innerHTML,
-        }))
+        const fields = {}
+        el.querySelectorAll('.summaryListItemContent li').forEach(liEl => {
+          const key = liEl.querySelector('label').innerHTML.replace(':', '')
+          const val = liEl.querySelector('span').innerHTML
+          fields[key] = val
+        })
         return { address, fields }
       })
     )
-     .then(data => console.log(data))
+//     .then(data => console.log(data))
     // .catch(console.error);
     // .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
     // .click('#searchAddressSimple>a')
