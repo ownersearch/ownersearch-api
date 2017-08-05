@@ -28,8 +28,8 @@ const search = ({ address }) => nightmare
     .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
         const address = el.querySelector('h2 a').innerHTML
         const fields = [ ...el.querySelectorAll('.summaryListItemContent li') ].map(liEl => ({
-          key: liEl.querySelector('label').innerHtml,
-          val: liEl.querySelector('span').innerHtml,
+          key: liEl.querySelector('label').innerHTML,
+          val: liEl.querySelector('span').innerHTML,
         }))
         return { address, fields }
       })
