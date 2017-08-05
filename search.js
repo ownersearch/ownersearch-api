@@ -13,7 +13,7 @@ const app = express()
 app.use(bodyParser.json())
 app.use(cors())
 
-// Eg: http://localhost:3000/api/v1/search?address=406/21%20Enmore%20Road%20Newtown%20NSW%202042
+// Eg: http://localhost:3003/api/v1/search?address=406/21%20Enmore%20Road%20Newtown%20NSW%202042
 app.use('/api/v1/search', (req, res) => {
 
   const { address } = req.query
