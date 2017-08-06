@@ -21,6 +21,9 @@ const initialise = () => {
   }
 }
 
+const convertKeysToCamelCase = properties => properties.map(property => mapKeys(property, (val, key) => camelCase(key)))
+const convertOwnerNameIntoArray = properties => properties.map(property => Object.assign(property, { owners: property.ownerName.split(', ') }))
+
 const search = ({ address }) => nightmare
   .goto('https://rpp.rpdata.com/rpp/loadSummary.html')
   .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
@@ -36,7 +39,8 @@ const search = ({ address }) => nightmare
     })
     return result
   }))
-  .then(properties => properties.map(property => mapKeys(property, (val, key) => camelCase(key))))
+  .then(convertKeysToCamelCase)
+  .then(convertOwnerNameIntoArray)
 
 const isReady = () => initialised
 
