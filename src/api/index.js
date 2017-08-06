@@ -27,18 +27,12 @@ app.get('/api/v1/search', (req, res) => {
 
     rpData.search({ address }).then((properties) => {
         return properties 
-        return Promise.map(properties, (property) => {
-            return whitePages.search({ type: 'residential', name: property.fields['Owner Name'] });
-        });
+//        return Promise.map(properties, (property) => {
+//            return whitePages.search({ type: 'residential', name: property.fields['Owner Name'] });
+//        });
     })
     .then((results) => res.json(results));
 });
-
-////whitepages.searchBusiness({
-////  name: 'Ecolight',
-////}).then((response) => {
-////  console.log(response.data.results)
-////})
 
 const providerInterconnect = [{
     name: 'white pages',

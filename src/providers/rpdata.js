@@ -1,3 +1,5 @@
+const { mapKeys, camelCase } = require('lodash')
+
 const nightmare = require('nightmare')({
     show: true,
     typeInterval: 70,
@@ -26,21 +28,16 @@ const search = ({ address }) => nightmare
     .click('#addressLink')
     .wait('.summaryListItem')
     .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
-        const address = el.querySelector('h2 a').innerHTML
-        const fields = {}
-        el.querySelectorAll('.summaryListItemContent li').forEach(liEl => {
-          const key = liEl.querySelector('label').innerHTML.replace(':', '')
-          const val = liEl.querySelector('span').innerHTML
-          fields[key] = val
-        })
-        return { address, fields }
+      const result = {}
+      result.address = el.querySelector('h2 a').innerText
+      el.querySelectorAll('.summaryListItemContent li').forEach(liEl => {
+        const key = liEl.querySelector('label').innerText.replace(':', '')
+        const val = liEl.querySelector('span').innerText
+        result[key] = val
       })
-    )
-//     .then(data => console.log(data))
-    // .catch(console.error);
-    // .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
-    // .click('#searchAddressSimple>a')
-    // .wait('#ownershipPanel')
+      return result
+    }))
+     .then(properties => properties.map(property => mapKeys(property, (val, key) => camelCase(key))))
 
 const isReady = () => initialised;
 
@@ -49,17 +46,3 @@ module.exports = {
     isReady,
     search,
 };
-
-// const search = ({ address }) => nightmare
-//     .goto('https://rpp.rpdata.com/rpp/login.html')
-//     .type('#j_username', 'gerardcole')
-//     .type('#j_password', 'gcp22222')
-//     .click('.btn.btn--primary.floatLeft')
-//     .wait('#searchAddressSimple input')
-//     .wait(50)
-//     .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
-//     .click('#searchAddressSimple>a')
-//     .wait('#ownershipPanel')
-//     .evaluate(() => document.querySelector('#propertySearchOwnerNameLink').innerHTML)
-//     .then((name) => [name])
-//     .catch(console.error);
