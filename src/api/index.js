@@ -26,9 +26,9 @@ app.get('/api/v1/search', (req, res) => {
     const { address } = req.query;
 
     rpData.search({ address }).then((properties) => {
-        console.log(properties)
+        return properties 
         return Promise.map(properties, (property) => {
-            return whitePages.search({ type: 'residential', name: property['Owner Name'] });
+            return whitePages.search({ type: 'residential', name: property.fields['Owner Name'] });
         });
     })
     .then((results) => res.json(results));

@@ -24,7 +24,7 @@ const search = ({ address }) => nightmare
     .goto('https://rpp.rpdata.com/rpp/loadSummary.html')
     .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
     .click('#addressLink')
-    .wait(5000)
+    .wait('.summaryListItem')
     .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
         const address = el.querySelector('h2 a').innerHTML
         const fields = {}
