@@ -22,7 +22,7 @@ const initialise = () => {
 }
 
 const convertKeysToCamelCase = properties => properties.map(property => mapKeys(property, (val, key) => camelCase(key)))
-const convertOwnerNameIntoArray = properties => properties.map(property => Object.assign(property, { owners: property.ownerName.split(', ') }))
+const convertOwnerNameIntoArray = properties => properties.map(property => Object.assign(property, { owners: property.ownerName && property.ownerName.split(', ') }))
 
 const search = ({ address }) => nightmare
   .goto('https://rpp.rpdata.com/rpp/loadSummary.html')

@@ -22,19 +22,16 @@ app.use((req, res, next) => {
 
 app.get('/api/v1/search', (req, res) => {
   const { subPremise, streetNum, route, suburb, state, postcode, country } = req.query
-  const street = [subPremise ? subPremise+'/' : '', streetNum+' ', route].join('')
-  const address = `${street} ${suburb} ${state} ${postcode}`
+  const street = [subPremise ? subPremise+'/' : '', streetNum+' ', route].join('') // Create the street string, i.e. 406/21 Enmore Rd
+  const address = `${street} ${suburb} ${state} ${postcode}` // Assemble the full address string the way RPdata likes it
   rpData.search({ address })
-  .then(results => Object.assign(results, { suburb, postcode })) // suburb and postcode is added to the response
+  .then(results => results.map(result => Object.assign(result, { suburb, postcode, state }))) // Suburb and postcode is added to the response
   .then(results => res.json(results))
 })
 
 app.get('/api/v1/people', (req, res) => {
   const { name, postcode } = req.query
-  return whitePages.search({
-    ...getNameDetails(name),
-    postcode,
-  })
+  return whitePages.search(Object.assign(getNameDetails(name), { postcode }))
   .then(results => res.json(results))
 })
 

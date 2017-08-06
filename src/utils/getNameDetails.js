@@ -1,4 +1,4 @@
-module.exports = (name) => {
+module.exports = (name = '') => {
   // This will convert a name string into an object.
   // It will figure out what the initials are and if it is a company or not
   const nameLower = name.toLowerCase()
