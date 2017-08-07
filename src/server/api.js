@@ -5,12 +5,12 @@ const { providersReady, rpData, whitePages } = require('../providers');
 
 const router = express.Router();
 
-app.get('/api/v1/restart', (req, res) => {
+router.get('/api/v1/restart', (req, res) => {
   res.json('restarting...');
   process.exit(0);
 });
 
-app.use((req, res, next) => {
+router.use((req, res, next) => {
   // ensure all providers have initialised and ready to process before accepting requests
   if (!providersReady()) {
     res.status(SERVICE_UNAVAILABLE).json()
@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   }
 })
 
-app.get('/api/v1/search', (req, res) => {
+router.get('/api/v1/search', (req, res) => {
   const { subPremise, streetNum, route, suburb, state, postcode, country } = req.query
   const street = `${subPremise ? 'subPremise/' : ''} ${streetNum} ${route}` // Create the street string, i.e. 406/21 Enmore Rd
   const address = `${street} ${suburb} ${state} ${postcode}` // Assemble the full address string the way RPdata likes it
@@ -28,7 +28,7 @@ app.get('/api/v1/search', (req, res) => {
   .then(results => res.json(results))
 })
 
-app.get('/api/v1/people', (req, res) => {
+router.get('/api/v1/people', (req, res) => {
   const { name, postcode } = req.query
   return whitePages.search(Object.assign(getNameDetails(name), { postcode }))
   .then(results => res.json(results))
