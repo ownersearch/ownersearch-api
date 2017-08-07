@@ -26,6 +26,7 @@ const convertOwnerNameIntoArray = properties => properties.map(property => Objec
 
 const search = ({ address }) => nightmare
   .goto('https://rpp.rpdata.com/rpp/loadSummary.html')
+  .wait('#searchAddressSimple input')
   .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
   .click('#addressLink')
   .wait('.summaryListItem')
