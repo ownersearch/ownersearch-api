@@ -2,6 +2,7 @@ const express = require('express');
 const { SERVICE_UNAVAILABLE } = require('http-status-codes');
 
 const { providersReady, rpData, whitePages } = require('../providers');
+const getNameDetails = require('../utils/getNameDetails')
 
 const router = express.Router();
 
