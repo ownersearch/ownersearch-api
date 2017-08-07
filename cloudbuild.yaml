@@ -1,0 +1,6 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/ownersearch-176101/api:latest', '-t', 'gcr.io/ownersearch-176101/api:$TAG_NAME', '-f', 'Dockerfile', '..']
+  dir: 'docker'
+
+images: ['gcr.io/ownersearch-176101/api:latest', 'gcr.io/ownersearch-176101/api:$TAG_NAME']

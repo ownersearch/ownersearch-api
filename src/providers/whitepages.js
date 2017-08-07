@@ -1,42 +1,42 @@
 const http = require('axios')
 
-const initialise = () => undefined;
-const isReady = () => true;
+const initialise = () => undefined
+const isReady = () => true
 
 const search = (data) => {
-    if (data.type === 'residential') {
-        return searchResidential(data);
-    } else if (data.type === 'business') {
-        return searchBusiness(data);
-    }
+  if (data.company) {
+    return searchBusiness(data)
+  } else {
+    return searchResidential(data)
+  }
 }
 
-const searchResidential = (options) => http({
-    method: 'GET',
-    url: 'https://www.whitepages.com.au/api/r/search',
-    params: {
-        location: options.location || 'Nationally',
-        givenName: options.givenName,
-        name: options.name,
-    }
+const searchResidential = ({ postcode, givenName, name }) => http({
+  method: 'GET',
+  url: 'https://www.whitepages.com.au/api/r/search',
+  params: {
+    location: postcode || 'Nationally',
+    givenName,
+    name,
+  }
 })
-.then((response) => response.data.results);
+.then(response => response.data.results)
 
-const searchBusiness = ({ location, name, }) => http({
-    method: 'GET',
-    url: 'https://www.whitepages.com.au/api/b/search',
-    params: {
-        location: location || 'Nationally',
-        expand: true,
-        name: name,
-    }
+const searchBusiness = ({ postcode, company, }) => http({
+  method: 'GET',
+  url: 'https://www.whitepages.com.au/api/b/search',
+  params: {
+    location: postcode || 'Nationally',
+    expand: true,
+    name: company,
+  }
 })
-.then((response) => response.data.results);
+.then(response => response.data.results)
 
 module.exports = {
-    initialise,
-    isReady,
-    search,
-    searchBusiness,
-    searchResidential,
-};
+  initialise,
+  isReady,
+  search,
+  searchBusiness,
+  searchResidential,
+}
