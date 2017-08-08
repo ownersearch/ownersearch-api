@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "GCLOUD_PROJECT=ownersearch nodemon src/index.js --exec babel-node --presets es2017",
+    "start": "GCLOUD_PROJECT=ownersearch-176101 nodemon src/index.js --exec babel-node --presets es2017",
     "david": "nodemon src/index.js --exec babel-node --presets es2017",
     "release": "bump --tag --push"
   },
