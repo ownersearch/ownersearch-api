@@ -1,6 +1,8 @@
-FROM quay.io/ivanvanderbyl/docker-nightmare:latest
+FROM alombardo4/nightmare
 
-ADD package.json /workspace
+WORKDIR /app
+
+ADD package.json .
 RUN yarn install
 
-ADD src /workspace/src
+ADD src src
