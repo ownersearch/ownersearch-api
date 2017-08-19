@@ -1,4 +1,5 @@
 const express = require('express');
+const { compact } = require('lodash')
 const { SERVICE_UNAVAILABLE } = require('http-status-codes');
 
 const { providersReady, rpData, whitePages } = require('../providers');
@@ -22,8 +23,8 @@ router.use((req, res, next) => {
 
 router.get('/api/v1/search', (req, res) => {
   const { subPremise, streetNum, route, suburb, state, postcode, country } = req.query
-  const street = `${subPremise ? 'subPremise/' : ''} ${streetNum} ${route}` // Create the street string, i.e. 406/21 Enmore Rd
-  const address = `${street} ${suburb} ${state} ${postcode}` // Assemble the full address string the way RPdata likes it
+  const streetPremNum = compact([subPremise, streetNum]).join('/') // Create the street num string, i.e. 406/21
+  const address = compact([streetPremNum, route, suburb, state, postcode]).join(' ')  // Assemble the full address string the way RPdata likes it
   rpData.search({ address })
   .then(results => results.map(result => Object.assign(result, { suburb, postcode, state }))) // Suburb and postcode is added to the response
   .then(results => res.json(results))

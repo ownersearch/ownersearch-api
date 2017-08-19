@@ -1,4 +1,5 @@
 const { mapKeys, camelCase } = require('lodash')
+const qs = require('querystring')
 
 const nightmare = require('nightmare')({
   show: true,
@@ -23,22 +24,30 @@ const initialise = () => {
 
 const convertKeysToCamelCase = properties => properties.map(property => mapKeys(property, (val, key) => camelCase(key)))
 const convertOwnerNameIntoArray = properties => properties.map(property => Object.assign(property, { owners: property.ownerName && property.ownerName.split(', ') }))
-
-const search = ({ address }) => nightmare
-  .goto('https://rpp.rpdata.com/rpp/loadSummary.html')
-  .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
-  .click('#addressLink')
-  .wait('.summaryListItem')
-  .evaluate(() => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
-    const result = {}
-    result.address = el.querySelector('h2 a').innerText
+const getResultData = () => [ ...document.querySelectorAll('.summaryListItem') ].map(el => {
+  const result = {}
+  const addressLink = el.querySelector('h2 a')
+  // Address Link will not exist if this property is out of the RPdata
+  // subscription. This happens if it is interstate?
+  if (addressLink) {
+    result.address = addressLink.innerText
     el.querySelectorAll('.summaryListItemContent li').forEach(liEl => {
       const key = liEl.querySelector('label').innerText.replace(':', '')
       const val = liEl.querySelector('span').innerText
       result[key] = val
     })
-    return result
-  }))
+  } else {
+    result.address = 'Error - Property must be in NSW'
+  }
+  return result
+})
+
+const search = ({ address }) => nightmare
+  .goto('https://rpp.rpdata.com/rpp/loadSummary.html')
+  .evaluate((address) => document.querySelector('#searchAddressSimple input').value = address, address)
+  .click('#addressLink')
+  .wait((addressEncoded) => location.search.includes(addressEncoded), qs.stringify(address))
+  .evaluate(getResultData)
   .then(convertKeysToCamelCase)
   .then(convertOwnerNameIntoArray)
 
